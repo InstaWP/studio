@@ -1,0 +1,107 @@
+/* Home-build in-place editor — LOCAL admin tooling (inc/homebuild-editor.php). */
+
+#iwp-editbar {
+	position: fixed;
+	right: 16px;
+	bottom: 16px;
+	z-index: 2147483600;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 10px;
+	background: #0E1726;
+	color: #fff;
+	border: 1px solid rgba( 255, 255, 255, .14 );
+	border-radius: 12px;
+	box-shadow: 0 12px 34px rgba( 0, 0, 0, .38 );
+	font: 600 13px/1.2 -apple-system, BlinkMacSystemFont, "Hanken Grotesk", "Segoe UI", sans-serif;
+}
+
+#iwp-editbar .iwp-brand {
+	padding-right: 4px;
+	color: #11BF85;
+	font: 700 11px/1 "IBM Plex Mono", ui-monospace, monospace;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+}
+
+#iwp-editbar .iwp-btn {
+	-webkit-appearance: none;
+	appearance: none;
+	padding: 7px 12px;
+	color: #fff;
+	background: rgba( 255, 255, 255, .06 );
+	border: 1px solid rgba( 255, 255, 255, .18 );
+	border-radius: 8px;
+	font: inherit;
+	cursor: pointer;
+}
+#iwp-editbar .iwp-btn:hover { background: rgba( 255, 255, 255, .12 ); }
+#iwp-editbar .iwp-btn.iwp-on { color: #04231a; background: #11BF85; border-color: #11BF85; }
+
+#iwp-editbar .iwp-primary { color: #04231a; background: #11BF85; border-color: #11BF85; }
+#iwp-editbar .iwp-primary:hover { filter: brightness( 1.06 ); }
+#iwp-editbar .iwp-primary:disabled { opacity: .45; cursor: default; filter: none; }
+
+#iwp-editbar .iwp-ghost { background: transparent; }
+
+#iwp-editbar .iwp-status {
+	max-width: 340px;
+	overflow: hidden;
+	font-weight: 500;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	opacity: .82;
+}
+#iwp-editbar .iwp-status.ok   { color: #11BF85; opacity: 1; }
+#iwp-editbar .iwp-status.err  { color: #ff6b6b; opacity: 1; }
+#iwp-editbar .iwp-status.warn { color: #ffcf5c; opacity: 1; }
+
+/* Editable affordances (only while editing). */
+body.iwp-editing [data-iwp-id] { cursor: text; }
+body.iwp-editing [data-iwp-kind="img"],
+body.iwp-editing [data-iwp-kind="bg"] { cursor: pointer; }
+
+body.iwp-editing [data-iwp-id]:hover {
+	outline: 1px dashed rgba( 17, 191, 133, .75 );
+	outline-offset: 2px;
+}
+body.iwp-editing [contenteditable="true"]:focus {
+	outline: 2px solid #11BF85;
+	outline-offset: 2px;
+	border-radius: 2px;
+}
+body.iwp-editing [data-iwp-kind="img"]:hover {
+	outline: 2px solid #11BF85;
+	outline-offset: 2px;
+}
+body.iwp-editing .iwp-dirty {
+	outline: 2px solid #ffcf5c !important;
+	outline-offset: 2px;
+}
+
+/* The editing HUD shows only while editing. */
+#iwp-editbar[hidden] { display: none; }
+
+/* Fallback floating entry button (only when the admin bar is hidden). */
+#iwp-editfab {
+	position: fixed;
+	right: 16px;
+	bottom: 16px;
+	z-index: 2147483600;
+	padding: 9px 14px;
+	color: #04231a;
+	background: #11BF85;
+	border: 0;
+	border-radius: 10px;
+	font: 700 13px/1 "Hanken Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	cursor: pointer;
+	box-shadow: 0 12px 30px rgba( 0, 0, 0, .3 );
+}
+#iwp-editfab:hover { filter: brightness( 1.05 ); }
+#iwp-editfab[hidden] { display: none; }
+
+/* Admin-bar entry: tint the (distinct) icon green, and light it up while editing. */
+#wpadminbar #wp-admin-bar-iwp-edit .ab-icon.dashicons-admin-customizer:before { color: #11BF85; }
+#wpadminbar #wp-admin-bar-iwp-edit.iwp-ab-on > .ab-item { background: #11BF85; color: #04231a; }
+#wpadminbar #wp-admin-bar-iwp-edit.iwp-ab-on > .ab-item .ab-icon:before { color: #04231a; }

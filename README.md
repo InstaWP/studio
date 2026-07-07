@@ -27,6 +27,7 @@ rides it rather than reinventing transport.
 
 | Path | What |
 |---|---|
+| `themes/instawp/` | **The engine** — a lightweight classic theme that renders source HTML files live (`instawp_render_homebuild()` + `template-homebuild.php`; no blocks, no DB content, no import). Includes **Edit in Place** (`inc/homebuild-editor.php` + `js/hb-editor.js` + `css/hb-editor.css`) — a local-only visual editor that writes changes back to the source `.html`. ⚠️ Currently bespoke to instawp.com — see [`themes/instawp/GENERALIZE.md`](themes/instawp/GENERALIZE.md) for what to strip/config-drive for a reusable starter. |
 | `plugins/iwp-feedback/` | **InstaWP Feedback** — a lightweight front-end feedback plugin. A floating widget lets reviewers drop a pin on any element and leave a note; threaded replies; triage in **wp-admin → Feedback**. Built for an agent loop: **export → resolve → re-import by `id`** (JSON, idempotent). Full `wp iwpfb` CLI. Team-gated (logged-in only) by default. |
 
 ### iwp-feedback quick reference

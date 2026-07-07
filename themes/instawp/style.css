@@ -1,0 +1,16 @@
+/*
+Theme Name: InstaWP
+Theme URI: https://instawp.com
+Description: InstaWP marketing site — lightweight classic theme that renders pages straight from variations/home-build/ (no page builder, no block editor, no build step).
+Version: 1.0.0
+Requires at least: 6.0
+Requires PHP: 8.2
+Author: InstaWP
+License: GPL-2.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: instawp
+Tags: marketing
+*/
+
+/* Page styles are loaded from variations/home-build/assets/ by functions.php.
+   This file exists for the WordPress theme header only. */
