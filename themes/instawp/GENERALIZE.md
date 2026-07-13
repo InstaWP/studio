@@ -15,8 +15,9 @@ ledger of what must be generalized to make it a reusable starter (the doc's
   `assets/nav.js`, `assets/reveal.js`, `assets/static-shared.css`.
 
 ## Generalize / make config-driven
-- **`instawp_homebuild_pages()`** — hardcoded slug→file map of ~30 instawp.com pages.
-  Replace with directory-scan or a config file (`pages.json`) so the map isn't source-baked.
+- ~~**`instawp_homebuild_pages()`** — hardcoded slug→file map.~~ **DONE** — now
+  auto-scans the source dir (`.html` → slug) or reads `<source>/pages.json`, filterable via
+  `instawp_homebuild_pages`. `INSTAWP_HB_DIR`/`_URL` are overridable (default `<wp-root>/site/`).
 - **SEO (RankMath-coupled)** — `instawp_homebuild_seo()`, `instawp_homebuild_meta_tag()`,
   and the `rank_math/frontend/{title,description}` filters. Make the SEO adapter pluggable
   (RankMath / Yoast / none).
@@ -36,6 +37,9 @@ optional module:
 - Assets referenced by those templates (blog card partial + blog CSS/JS live in the site's
   `variations/home-build/`, not the theme).
 
-## Known gate to relax when hosting (doc §9 hard part #2)
-- **Edit in Place is hard-gated to localhost** (blocks `*.instawp.site/.com/.io`). For a hosted
-  InstaStudio sandbox, relax to "this sandbox host only" (still block prod + the mirror).
+## Edit-in-Place host gate (doc §9 hard part #2) — has an escape hatch
+- Edit in Place auto-allows only localhost/`.local`/`.test` and hard-blocks
+  `*.instawp.{site,com,io,xyz}`. To use it on a hosted **sandbox**, set
+  `define( 'INSTAWP_HB_EDITOR', true );` in `wp-config.php` (an explicit opt-in that
+  overrides the host check). **Never set it on production.** A future refinement could
+  scope the opt-in to a specific sandbox host automatically.

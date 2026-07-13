@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Site · Built with InstaStudio</title>
+<meta name="description" content="A starter home page for an HTML-first WordPress site. Edit this file; the theme renders it live.">
+<link rel="stylesheet" href="assets/style.css">
+<style id="vh">
+/* page-specific styles go in this inline block (the theme carries it) */
+.hero .eyebrow{margin-bottom:14px;display:inline-block}
+</style>
+</head>
+<body>
+
+<!-- The theme provides the real nav/footer via assets/chrome.js; these two
+     markers tell the renderer where your page BODY starts and ends. -->
+<div id="site-nav"></div>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">HTML-first WordPress</span>
+    <h1>Your page is just an HTML file.</h1>
+    <p class="lead">Write plain HTML, and WordPress serves, routes, and lets you edit it, no page builder, no block editor, no build step. This whole page is <code>site/index.html</code>.</p>
+    <div class="cta">
+      <a class="btn" href="#">Get started</a>
+      <a class="btn ghost" href="about.html">Learn more</a>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <p class="lead">Three things, that's the whole model.</p>
+    <div class="grid" style="margin-top:28px">
+      <div class="card"><h3>1. Author</h3><p>An AI agent (or you) writes an HTML file into <code>site/</code>. Drop a file, get a page.</p></div>
+      <div class="card"><h3>2. Render</h3><p>The theme reads the file live and serves it as a real WordPress page. No import, no drift.</p></div>
+      <div class="card"><h3>3. Review &amp; ship</h3><p>Collect pin feedback, resolve it with an agent, and push to InstaWP when it's ready.</p></div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script src="assets/chrome.js"></script>
+</body>
+</html>

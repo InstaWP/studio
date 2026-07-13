@@ -9,8 +9,10 @@
  * See APP-UI.md and memory wp-implementation-approach.md.
  */
 
-define( 'INSTAWP_HB_DIR', ABSPATH . 'variations/home-build/' );           // filesystem
-define( 'INSTAWP_HB_URL', home_url( '/variations/home-build/' ) );        // web
+// Source directory of your HTML pages (the source of truth). Override both in
+// wp-config.php to point elsewhere. Default: <wp-root>/site/.
+defined( 'INSTAWP_HB_DIR' ) || define( 'INSTAWP_HB_DIR', ABSPATH . 'site/' );        // filesystem
+defined( 'INSTAWP_HB_URL' ) || define( 'INSTAWP_HB_URL', home_url( '/site/' ) );     // web
 
 // In-place editor for the home-build source (LOCAL admins only; no-op on the
 // mirror/prod). Writes edits straight back to the variations/home-build files.
@@ -21,57 +23,43 @@ require_once __DIR__ . '/inc/homebuild-editor.php';
  * Add a line here (and a WP page with that slug) to publish a page.
  */
 function instawp_homebuild_pages() {
-	return array(
-		// core
-		'home'                   => 'index.html',
-		'pricing'                => 'pricing.html',
-		'platform'               => 'platform.html',
-		'about'                  => 'about.html',
-		'contact'                => 'contact.html',
-		'request-demo'           => 'request-demo.html',
-		'customers'              => 'customers.html',
-		// platform features
-		'hosting'                => 'features/hosting.html',
-		'snapshots'    => 'features/snapshots.html',
-		'templates'              => 'features/templates.html',
-		'migrations'             => 'features/migrations.html',
-		'domains'                => 'features/domains.html',
-		'developers'             => 'features/developers.html',
-		'cli'                    => 'features/cli.html',
-		'ai-features'            => 'features/ai-features.html',
-		'manage'                 => 'features/manage.html',
-		'waas'                   => 'features/waas.html',
-		'api'                    => 'features/api.html',
-		'integrations'           => 'features/integrations.html',
-		'portal'                 => 'features/portal.html',
-		'staging'                => 'features/staging.html',
-		// use cases
-		'for-agencies'           => 'use-cases/agencies.html',
-		'plugin-theme-companies' => 'use-cases/plugin-theme-companies.html',
-		'hosting-companies'      => 'use-cases/hosting-companies.html',
-		'ai-builders'            => 'use-cases/ai-builders.html',
-		'agency-program'         => 'use-cases/agency-program.html',
-		'reselling'              => 'use-cases/reselling.html',
-		'use-cases'              => 'use-cases.html',
-		// company / programs / misc
-		'support'                => 'support.html',
-		'support-form-for-manual-migration' => 'support-form-for-manual-migration.html',
-		'careers'                => 'careers.html',
-		'affiliate'              => 'affiliate.html',
-		'roadmap'                => 'roadmap.html',
-		'brand-assets'           => 'brand-assets.html',
-		'mentions'               => 'mentions.html',
-		'tastewp-alternative'    => 'tastewp-alternative.html',
-		'seller'                 => 'seller.html',
-		'seller-guidelines'      => 'seller-guidelines.html',
-		// legal (parent + children under /legal/)
-		'legal'                  => 'legal.html',
-		'terms'                  => 'legal/terms.html',
-		'privacy-policy'         => 'legal/privacy-policy.html',
-		'data-privacy'           => 'legal/data-privacy.html',
-		'refund-policy'          => 'legal/refund-policy.html',
-		'cookie-policy'          => 'legal/cookie-policy.html',
-	);
+	static $map = null;
+	if ( null !== $map ) {
+		return $map;
+	}
+	$dir = rtrim( INSTAWP_HB_DIR, '/' );
+
+	// 1) Explicit map via <source>/pages.json ( { "slug": "relative/file.html" } ) — full control.
+	$json = $dir . '/pages.json';
+	if ( is_readable( $json ) ) {
+		$decoded = json_decode( (string) file_get_contents( $json ), true );
+		if ( is_array( $decoded ) && $decoded ) {
+			return $map = apply_filters( 'instawp_homebuild_pages', $decoded );
+		}
+	}
+
+	// 2) Otherwise auto-scan: every .html under the source dir becomes a page. The slug is
+	//    the path relative to the source dir minus ".html"; a root index.html maps to "home".
+	$map = array();
+	if ( is_dir( $dir ) ) {
+		$it = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $dir, FilesystemIterator::SKIP_DOTS ) );
+		foreach ( $it as $file ) {
+			if ( ! $file->isFile() || 0 !== strcasecmp( $file->getExtension(), 'html' ) ) {
+				continue;
+			}
+			$rel = ltrim( str_replace( '\\', '/', substr( $file->getPathname(), strlen( $dir ) ) ), '/' );
+			// Skip shared assets, partials, and dot-dirs (backups etc.).
+			if ( 0 === strpos( $rel, 'assets/' ) || 0 === strpos( $rel, 'partials/' )
+				|| false !== strpos( $rel, '/partials/' ) || false !== strpos( $rel, '/.' ) || '.' === $rel[0] ) {
+				continue;
+			}
+			$slug = preg_replace( '/\.html$/i', '', $rel );
+			$slug = ( 'index' === $slug ) ? 'home' : $slug;
+			$map[ $slug ] = $rel;
+		}
+		ksort( $map );
+	}
+	return $map = apply_filters( 'instawp_homebuild_pages', $map );
 }
 
 /**
