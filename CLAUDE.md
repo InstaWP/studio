@@ -50,7 +50,7 @@ edit the HTML; WordPress serves, routes, and lets a human edit it.
   and only when explicitly asked. Snapshot before risky changes.
 
 ## Stack / how you reach the site
-- Theme: `themes/instawp/` (render engine + Edit in Place). Plugin: `plugins/iwp-feedback/`.
+- Plugins: `plugins/iwp-studio/` (the source-rendered engine + Edit in Place) and `plugins/iwp-feedback/`. Companion theme: `themes/iwp-studio/` (minimal; the engine works with any theme).
 - Skills: `skills/build-page/`, `skills/resolve-feedback/`.
 - Agent ↔ WordPress bridge: **InstaMCP** (site-level WP tools over MCP) and/or the
   **`instawp` CLI** (`instawp wp <site> -- <wp-cli>`, `sync`, `db`) — or plain `wp` on

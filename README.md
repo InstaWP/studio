@@ -29,10 +29,11 @@ Go from clone to an AI-built HTML page in ~10 minutes — full walk-through in
 [`docs/GETTING-STARTED.md`](docs/GETTING-STARTED.md):
 
 1. **Assemble** into a WordPress install: `bash scripts/bootstrap.sh /path/to/wordpress`
-   (or copy `themes/instawp` + `plugins/iwp-feedback` into `wp-content/`, and `site/`
-   to the webroot). Activate the theme + plugin.
-2. **Point** the theme at your pages — default source dir is `<wp-root>/site/`; every
-   `.html` there becomes a page (slug = filename). Create matching WP pages.
+   (or copy `plugins/iwp-studio` + `plugins/iwp-feedback` into `wp-content/plugins/`,
+   `themes/iwp-studio` into `wp-content/themes/`, and `site/` to the webroot). Activate
+   the two plugins + the companion theme.
+2. **Create the pages** — every `.html` in `site/` becomes a page (slug = filename);
+   `wp instastudio pages` publishes a WP page for each and sets the front page.
 3. **Connect** your agent (Claude) via InstaMCP or the `instawp` CLI, and point it at
    [`CLAUDE.md`](CLAUDE.md).
 4. **Build** — ask it to "add a page"; it uses the `build-page` skill. **Review** with
@@ -44,11 +45,12 @@ Go from clone to an AI-built HTML page in ~10 minutes — full walk-through in
 | Path | What |
 |---|---|
 | `CLAUDE.md` / `AGENTS.md` | **Agent instructions** — what the site is, the page conventions, the hard rules, and the workflow. Point your AI agent here first. |
-| `site/` | **Starter source site** — the HTML pages (`index.html`, `about.html`), shared `assets/chrome.js` (nav/footer) + `assets/style.css` (design tokens), and `DESIGN.md`. This is the source of truth the theme renders. Replace it with your own. |
-| `skills/build-page/` | **The Build playbook** — how an agent authors a page (write the `.html` in the design system + register the WP page). |
+| `plugins/iwp-studio/` | **The engine (a plugin)** — renders source HTML files live as real pages (`instawp_render_homebuild()`; no blocks, no DB content, no build), includes **Edit in Place** and the `wp instastudio pages` command. Works with any theme (takes over only mapped pages via `template_include`). Clean/generic — see its [README](plugins/iwp-studio/README.md) for what's intentionally left out. |
+| `themes/iwp-studio/` | **Minimal companion theme** — satisfies WordPress + renders any non-source request. Bring your own theme instead if you prefer. |
+| `site/` | **Starter source site** — the HTML pages (`index.html`, `about.html`), shared `assets/chrome.js` (nav/footer) + `assets/style.css` (design tokens), and `DESIGN.md`. The source of truth the plugin renders. Replace it with your own. |
+| `skills/build-page/` | **The Build playbook** — how an agent authors a page (write the `.html` in the design system + `wp instastudio pages`). |
 | `docs/` | `GETTING-STARTED.md` (setup + workflow) and `BLUEPRINT.md` (packaging later). |
-| `scripts/` | `bootstrap.sh` (assemble into a WP install) · `publish.sh` (ship `site/` + theme + plugin to an InstaWP sandbox). |
-| `themes/instawp/` | **The engine** — a lightweight classic theme that renders source HTML files live (`instawp_render_homebuild()` + `template-homebuild.php`; no blocks, no DB content, no import). Includes **Edit in Place** (`inc/homebuild-editor.php` + `js/hb-editor.js` + `css/hb-editor.css`) — a local-only visual editor that writes changes back to the source `.html`. ⚠️ Currently bespoke to instawp.com — see [`themes/instawp/GENERALIZE.md`](themes/instawp/GENERALIZE.md) for what to strip/config-drive for a reusable starter. |
+| `scripts/` | `bootstrap.sh` (assemble into a WP install) · `publish.sh` (ship `site/` + plugins + theme to an InstaWP sandbox). |
 | `plugins/iwp-feedback/` | **InstaWP Feedback** — a lightweight front-end feedback plugin. A floating widget lets reviewers drop a pin on any element and leave a note; threaded replies; triage in **wp-admin → Feedback**. Built for an agent loop: **export → resolve → re-import by `id`** (JSON, idempotent). Full `wp iwpfb` CLI. Team-gated (logged-in only) by default. |
 | `skills/resolve-feedback/` | **The Resolve playbook** — closes the loop with `iwp-feedback`: read a feedback export, map each item to its source `.html`, apply safe in-design-system fixes, set status + resolution in place, re-import. Installable as a Claude Code skill; the canonical form is an InstaMCP site-skill (travels with the site, any MCP agent). Agent-agnostic; project specifics (paths, hard rules, publish target) are read from the project config. |
 

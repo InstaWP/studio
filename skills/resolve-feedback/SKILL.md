@@ -22,7 +22,7 @@ Build → Edit → **Review** (pins) → **Resolve** (this) → Ship.
 > the publish target are project-specific. This playbook references them
 > generically — read them from the project's own theme + `CLAUDE.md`/config, not
 > from here. Names below (`instawp_homebuild_pages()`, source dir) follow the
-> source-rendered theme shipped in this repo.
+> source-rendered engine (iwp-studio plugin) shipped in this repo.
 
 ## Inputs
 
@@ -45,7 +45,7 @@ read-only context.
 1. **Read** the JSON. Triage every item up front: safe-fix · judgment-call · junk.
 
 2. **Map page → source file.** The `path` is the WordPress slug. Resolve it via the
-   theme's page map (`instawp_homebuild_pages()` in the source-rendered theme — slug
+   theme's page map (`instawp_homebuild_pages()` in the iwp-studio plugin — slug
    → `.html` under the project's source dir). **Read that map live; do not hardcode
    it** (it drifts).
 

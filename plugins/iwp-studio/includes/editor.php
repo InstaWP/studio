@@ -700,10 +700,10 @@ add_action(
 		}
 		wp_enqueue_media();
 
-		$css = get_theme_file_path( 'css/hb-editor.css' );
-		$js  = get_theme_file_path( 'js/hb-editor.js' );
-		wp_enqueue_style( 'instawp-hb-editor', get_theme_file_uri( 'css/hb-editor.css' ), array(), file_exists( $css ) ? filemtime( $css ) : '1' );
-		wp_enqueue_script( 'instawp-hb-editor', get_theme_file_uri( 'js/hb-editor.js' ), array( 'media-editor' ), file_exists( $js ) ? filemtime( $js ) : '1', true );
+		$css = IWPS_DIR . 'assets/hb-editor.css';
+		$js  = IWPS_DIR . 'assets/hb-editor.js';
+		wp_enqueue_style( 'instawp-hb-editor', IWPS_URL . 'assets/hb-editor.css', array(), file_exists( $css ) ? filemtime( $css ) : '1' );
+		wp_enqueue_script( 'instawp-hb-editor', IWPS_URL . 'assets/hb-editor.js', array( 'media-editor' ), file_exists( $js ) ? filemtime( $js ) : '1', true );
 
 		$slug = instawp_homebuild_slug();
 		$map  = instawp_homebuild_pages();

@@ -11,16 +11,17 @@ Go from clone to an AI-built, HTML-first WordPress page. ~10 minutes.
 ## 1. Assemble the pieces
 The repo is a set of components (theme + plugin + starter `site/` + skills). Put them in a WP install:
 
-**Local:** `bash scripts/bootstrap.sh /path/to/wordpress` (symlinks the theme + plugin, seeds `site/`).
+**Local:** `bash scripts/bootstrap.sh /path/to/wordpress` (symlinks the plugins + companion theme, seeds `site/`).
 
-**Manual / cloud:** copy `themes/instawp` → `wp-content/themes/`, `plugins/iwp-feedback`
-→ `wp-content/plugins/`, and the `site/` folder to the webroot (or anywhere, then point
-the theme at it — see step 3).
+**Manual / cloud:** copy `plugins/iwp-studio` + `plugins/iwp-feedback` →
+`wp-content/plugins/`, `themes/iwp-studio` → `wp-content/themes/`, and the `site/` folder
+to the webroot (or anywhere, then point the plugin at it — see step 3).
 
-Then: activate the **instawp** theme and the **iwp-feedback** plugin.
+Then: activate the **iwp-studio** + **iwp-feedback** plugins and the **iwp-studio** companion
+theme (or your own theme — the engine works with any).
 
 ## 2. Point WordPress at your pages
-- The theme renders HTML from a **source directory**. Default: `<wp-root>/site/`.
+- The iwp-studio plugin renders HTML from a **source directory**. Default: `<wp-root>/site/`.
   Override in `wp-config.php` if it lives elsewhere:
   ```php
   define('INSTAWP_HB_DIR', ABSPATH . 'site/');            // filesystem path
@@ -64,7 +65,8 @@ Ask your agent: *"add a pricing page"*. It uses the **build-page** skill: writes
 sandbox is ready, promote it to production from the InstaWP dashboard.
 
 ## Notes
-- The starter theme is currently derived from a real site, see `themes/instawp/GENERALIZE.md`
-  for what's still bespoke (SEO adapter, brand tokens, the optional blog module).
+- The engine is the `iwp-studio` **plugin** (works with any theme). It's the clean,
+  generic core; see `plugins/iwp-studio/README.md` for what's intentionally left out
+  (SEO plugin coupling, og-images, brand fonts, a server-side blog).
 - Hard rules live in `CLAUDE.md`; keep the agent honest (no fabricated proof; edit `site/`;
   never publish to prod unasked).

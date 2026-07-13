@@ -4,7 +4,7 @@ The real unit of delivery is an **InstaWP blueprint**: a sandbox that already ca
 capabilities **and** the agent loop, so "clone → the site is InstaStudio-ready."
 
 A blueprint bundles:
-1. **Capabilities** — the `instawp` theme + `iwp-feedback` plugin, pre-activated.
+1. **Capabilities** — the `iwp-studio` + `iwp-feedback` plugins + the `iwp-studio` companion theme, pre-activated.
 2. **Playbooks** — the skills (`build-page`, `resolve-feedback`) promoted to **InstaMCP
    site-skills** (`skill_save`) so they travel with the site and any MCP agent gets them.
 3. **Seed + config** — a starter `site/`, `CLAUDE.md`, and `DESIGN.md`.
