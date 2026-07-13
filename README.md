@@ -1,60 +1,106 @@
 # InstaStudio
 
-**Source-rendered WordPress** — build, edit, review, and ship real WordPress
-marketing sites without a page builder or the block editor. Your HTML files
-*are* the pages; WordPress serves, routes, and edits them (no blocks, no
-DB-stored content, no import step).
+**HTML-first WordPress.** Your pages are plain HTML files; a plugin renders them
+live as real WordPress pages, no page builder, no block editor, no build step, no
+DB-stored content. Author with an AI agent, edit in place, collect client feedback,
+resolve it, and ship. The category line: **source-rendered WordPress** — your files
+*are* the pages; WordPress serves, routes, and edits them.
 
-> ⚠️ Early / internal. This repo is being assembled while the workflow is
-> dogfooded on instawp.com. Expect churn; nothing here is a stable API yet.
+> ⚠️ Early / internal, being dogfooded on instawp.com. Expect churn. That said, the
+> full clone → deploy → AI-build → render loop is validated end-to-end on throwaway
+> InstaWP sandboxes.
 
 ## The flow
 
-InstaStudio is a **workflow layer on top of [InstaWP](https://instawp.com)**, not
-a separate product:
+InstaStudio is a **workflow layer on top of [InstaWP](https://instawp.com)**, not a
+separate product. It rides InstaWP's connection layer (InstaMCP + the `instawp` CLI)
+rather than reinventing transport.
 
-1. **Build** — an AI writes plain HTML.
-2. **Edit** — "Edit in Place" edits the source `.html` visually (local).
-3. **Review** — clients pin feedback on the live site, no login required.
-4. **Resolve** — an agent works the feedback export and applies fixes to the
-   same source files.
+1. **Build** — an AI agent writes plain HTML.
+2. **Edit** — "Edit in Place" edits the source `.html` visually.
+3. **Review** — reviewers pin feedback on the live site.
+4. **Resolve** — an agent works the feedback export and fixes the same source files.
 5. **Ship** — push to InstaWP (sandbox → production).
 
-The connection layer (InstaMCP + the InstaWP CLI) already exists; InstaStudio
-rides it rather than reinventing transport.
+## How a page works
+
+A page is one HTML file in `site/`. The `iwp-studio` plugin reads it live and serves
+it as a real WordPress page:
+
+```html
+<!-- site/pricing.html  ->  /pricing/ -->
+<head>
+  <title>Pricing</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <div id="site-nav"></div>          <!-- markers: your body is what's between them -->
+    <section class="hero"> … your content … </section>
+  <div id="site-footer"></div>
+  <script src="assets/chrome.js"></script>   <!-- shared nav/footer, single source -->
+</body>
+```
+
+`wp instastudio pages` registers the WordPress pages, and `/pricing/` is live. No
+build, no import, no drift, the file is the source of truth. The engine is a plugin,
+so it works with **any** theme.
+
+## Requirements
+
+- A WordPress site to render into (an **InstaWP** sandbox is easiest, disposable and
+  promotable to production; local WP works too).
+- An AI coding agent (e.g. **Claude**) and a way to reach the site: **InstaMCP** or the
+  **`instawp` CLI** (`npm i -g @instawp/cli`).
 
 ## Quick start
 
-Go from clone to an AI-built HTML page in ~10 minutes — full walk-through in
+Clone to an AI-built page in ~10 minutes, full walk-through in
 [`docs/GETTING-STARTED.md`](docs/GETTING-STARTED.md):
 
 1. **Assemble** into a WordPress install: `bash scripts/bootstrap.sh /path/to/wordpress`
    (or copy `plugins/iwp-studio` + `plugins/iwp-feedback` into `wp-content/plugins/`,
    `themes/iwp-studio` into `wp-content/themes/`, and `site/` to the webroot). Activate
    the two plugins + the companion theme.
-2. **Create the pages** — every `.html` in `site/` becomes a page (slug = filename);
-   `wp instastudio pages` publishes a WP page for each and sets the front page.
-3. **Connect** your agent (Claude) via InstaMCP or the `instawp` CLI, and point it at
+2. **Create the pages** — `wp instastudio pages` publishes a WordPress page for every
+   `.html` in `site/` (slug = filename) and sets the front page.
+3. **Connect** your agent via InstaMCP or the `instawp` CLI and point it at
    [`CLAUDE.md`](CLAUDE.md).
-4. **Build** — ask it to "add a page"; it uses the `build-page` skill. **Review** with
-   the feedback widget, **Resolve** with the `resolve-feedback` skill, **Ship** with
-   `scripts/publish.sh`.
+4. **Build → Review → Resolve → Ship** — ask it to "add a page" (the `build-page` skill),
+   collect feedback with the widget, resolve with the `resolve-feedback` skill, and
+   ship with `scripts/publish.sh`.
 
 ## What's here
 
+**The engine**
+
 | Path | What |
 |---|---|
-| `CLAUDE.md` / `AGENTS.md` | **Agent instructions** — what the site is, the page conventions, the hard rules, and the workflow. Point your AI agent here first. |
-| `plugins/iwp-studio/` | **The engine (a plugin)** — renders source HTML files live as real pages (`instawp_render_homebuild()`; no blocks, no DB content, no build), includes **Edit in Place** and the `wp instastudio pages` command. Works with any theme (takes over only mapped pages via `template_include`). Clean/generic — see its [README](plugins/iwp-studio/README.md) for what's intentionally left out. |
-| `themes/iwp-studio/` | **Minimal companion theme** — satisfies WordPress + renders any non-source request. Bring your own theme instead if you prefer. |
-| `site/` | **Starter source site** — the HTML pages (`index.html`, `about.html`), shared `assets/chrome.js` (nav/footer) + `assets/style.css` (design tokens), and `DESIGN.md`. The source of truth the plugin renders. Replace it with your own. |
-| `skills/build-page/` | **The Build playbook** — how an agent authors a page (write the `.html` in the design system + `wp instastudio pages`). |
-| `docs/` | `GETTING-STARTED.md` (setup + workflow) and `BLUEPRINT.md` (packaging later). |
-| `scripts/` | `bootstrap.sh` (assemble into a WP install) · `publish.sh` (ship `site/` + plugins + theme to an InstaWP sandbox). |
-| `plugins/iwp-feedback/` | **InstaWP Feedback** — a lightweight front-end feedback plugin. A floating widget lets reviewers drop a pin on any element and leave a note; threaded replies; triage in **wp-admin → Feedback**. Built for an agent loop: **export → resolve → re-import by `id`** (JSON, idempotent). Full `wp iwpfb` CLI. Team-gated (logged-in only) by default. |
-| `skills/resolve-feedback/` | **The Resolve playbook** — closes the loop with `iwp-feedback`: read a feedback export, map each item to its source `.html`, apply safe in-design-system fixes, set status + resolution in place, re-import. Installable as a Claude Code skill; the canonical form is an InstaMCP site-skill (travels with the site, any MCP agent). Agent-agnostic; project specifics (paths, hard rules, publish target) are read from the project config. |
+| `plugins/iwp-studio/` | **The source-rendered engine (a plugin).** Renders source HTML live as pages, includes **Edit in Place** (click text/images to edit → writes back to the source) and `wp instastudio pages`. Works with any theme (takes over only mapped pages via `template_include`). Clean/generic, see its [README](plugins/iwp-studio/README.md) for what's intentionally left out. |
+| `themes/iwp-studio/` | **Minimal companion theme.** Satisfies WordPress + renders any non-source request. Bring your own theme instead if you like. |
 
-### iwp-feedback quick reference
+**Your site**
+
+| Path | What |
+|---|---|
+| `site/` | **Starter source site** — HTML pages (`index.html`, `about.html`) + shared `assets/chrome.js` (nav/footer) + `assets/style.css` (design tokens) + `DESIGN.md`. The source of truth. Replace with your own. |
+| `CLAUDE.md` / `AGENTS.md` | **Agent instructions** — the model, page conventions, hard rules, and workflow. Point your AI agent here first. |
+
+**Review + agent playbooks**
+
+| Path | What |
+|---|---|
+| `plugins/iwp-feedback/` | **InstaWP Feedback** — a floating widget to drop pin comments on any element; threaded replies; triage in **wp-admin → Feedback**. Built for an agent loop: **export → resolve → re-import by `id`** (idempotent JSON). Full `wp iwpfb` CLI. Team-gated (logged-in) by default. |
+| `skills/build-page/` | **Build playbook** — how an agent authors a page in the design system. |
+| `skills/resolve-feedback/` | **Resolve playbook** — read a feedback export, map each item to its source `.html`, apply safe in-design-system fixes, re-import. Installable as a Claude Code skill; canonical form is an InstaMCP site-skill (travels with the site, any MCP agent). |
+
+**Setup + ops**
+
+| Path | What |
+|---|---|
+| `docs/` | `GETTING-STARTED.md` (setup + workflow) · `BLUEPRINT.md` (packaging later). |
+| `scripts/` | `bootstrap.sh` (assemble into a WP install) · `publish.sh` (ship to an InstaWP sandbox). |
+
+### iwp-feedback CLI
 
 ```bash
 wp iwpfb list [--unresolved | --status=<s>] [--type --page --format=table|json|csv|ids|count]
