@@ -45,14 +45,13 @@ Rules that matter:
 - **No fabricated proof** — real content only; flag unknowns with a `VERIFY` comment.
 
 ## Register the WordPress page
-The slug is derived from the filename (`about.html` → `about`; `index.html` → home).
-Create the WP page so the slug routes:
+The slug is derived from the filename (`about.html` → `about`; `index.html` → the
+front page). One command creates a published page for every source file that lacks
+one (and sets the front page):
 ```bash
-wp post create --post_type=page --post_status=publish --post_title="About" --post_name=about
-# via the InstaWP CLI on a cloud site:  instawp wp <site> -- post create …
-# or the InstaMCP create_content tool
+wp instastudio pages                      # local
+instawp wp <site> -- instastudio pages    # cloud sandbox   (--dry-run to preview)
 ```
-(The home page is whatever page is set as the front page.)
 
 ## Verify
 - Open the page locally / on the sandbox and eyeball it: nav + footer present, styles

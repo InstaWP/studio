@@ -28,11 +28,14 @@ Then: activate the **instawp** theme and the **iwp-feedback** plugin.
   ```
 - Every `.html` in `site/` becomes a page; the slug is the filename
   (`about.html` → `about`, `index.html` → the front page).
-- Create the WordPress pages so the slugs route:
+- **Create the WordPress pages with one command** — it makes a published page for
+  every source file that lacks one and sets `home` as the front page:
   ```bash
-  wp post create --post_type=page --post_status=publish --post_title="About" --post_name=about
-  # front page: create a "Home" page and set Settings → Reading → front page to it
+  wp instastudio pages                       # local
+  instawp wp <site> -- instastudio pages     # cloud sandbox
+  wp instastudio pages --dry-run             # preview first
   ```
+  Re-run it any time you add source files.
 
 ## 3. Connect your agent to the site
 So Claude (or any agent) can build/edit/register pages:

@@ -801,3 +801,102 @@ add_filter( 'single_post_title', 'instawp_replace_year_token' );
 add_filter( 'get_the_excerpt', 'instawp_replace_year_token' );
 add_filter( 'rank_math/frontend/title', 'instawp_replace_year_token' );
 add_filter( 'rank_math/frontend/description', 'instawp_replace_year_token' );
+
+/* ===========================================================================
+   WP-CLI:  wp instastudio pages
+   Create a published WordPress page for every source .html that doesn't have one
+   yet (so "drop a file -> live page" needs no manual post-create), and set the
+   `home` page as the site's front page. Reads the same map as the renderer.
+   =========================================================================== */
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+
+	class InstaStudio_CLI {
+
+		/**
+		 * Sync WordPress pages from the source HTML files.
+		 *
+		 * ## OPTIONS
+		 *
+		 * [--dry-run]
+		 * : Show what would be created without changing anything.
+		 *
+		 * @when after_wp_load
+		 */
+		public function pages( $args, $assoc ) {
+			$dry     = isset( $assoc['dry-run'] );
+			$map     = instawp_homebuild_pages();
+			$created = 0;
+			$exists  = 0;
+
+			if ( ! $map ) {
+				\WP_CLI::warning( 'No pages found. Is INSTAWP_HB_DIR (' . INSTAWP_HB_DIR . ') present and full of .html files?' );
+				return;
+			}
+
+			foreach ( $map as $slug => $file ) {
+				// The 'home' slug is the front page; everything else routes by its path.
+				$path = ( 'home' === $slug ) ? 'home' : $slug;
+				list( $id, $made ) = $this->ensure_page( $path, $dry );
+				if ( $made ) {
+					$created++;
+					\WP_CLI::log( ( $dry ? '[dry] ' : '' ) . "page  $path  <-  $file" );
+				} else {
+					$exists++;
+				}
+			}
+
+			// Point the front page at the 'home' page.
+			$front = '';
+			if ( isset( $map['home'] ) ) {
+				$home = get_page_by_path( 'home' );
+				if ( $home ) {
+					if ( ! $dry ) {
+						update_option( 'show_on_front', 'page' );
+						update_option( 'page_on_front', $home->ID );
+					}
+					$front = '  |  front page = home';
+				}
+			}
+
+			if ( ! $dry ) {
+				flush_rewrite_rules( false );
+			}
+			\WP_CLI::success( "pages: {$created} created, {$exists} already existed{$front}" . ( $dry ? '  (dry run)' : '' ) );
+		}
+
+		/** Ensure a page exists at a (possibly nested a/b/c) path; create ancestors as needed. */
+		private function ensure_page( $path, $dry ) {
+			$existing = get_page_by_path( $path );
+			if ( $existing ) {
+				return array( $existing->ID, false );
+			}
+			$made   = false;
+			$parent = 0;
+			$accum  = '';
+			foreach ( explode( '/', $path ) as $seg ) {
+				$accum = $accum ? "$accum/$seg" : $seg;
+				$node  = get_page_by_path( $accum );
+				if ( $node ) {
+					$parent = $node->ID;
+					continue;
+				}
+				$made  = true;
+				$title = ucwords( str_replace( '-', ' ', 'home' === $seg ? 'Home' : $seg ) );
+				if ( $dry ) {
+					$parent = -1; // placeholder id for the dry run
+					continue;
+				}
+				$parent = wp_insert_post( array(
+					'post_type'   => 'page',
+					'post_status' => 'publish',
+					'post_title'  => $title,
+					'post_name'   => $seg,
+					'post_parent' => max( 0, (int) $parent ),
+				) );
+			}
+			return array( $parent, $made );
+		}
+	}
+
+	\WP_CLI::add_command( 'instastudio', 'InstaStudio_CLI' );
+}

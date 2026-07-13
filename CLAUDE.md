@@ -16,9 +16,9 @@ edit the HTML; WordPress serves, routes, and lets a human edit it.
 
 ## Adding or editing a page  (skill: `build-page`)
 1. Create/edit `site/<name>.html` following the **page conventions** below.
-2. Create a WordPress page whose slug matches (`wp post create --post_type=page
-   --post_status=publish --post_name=<name>`), or use your MCP/CLI equivalent. The
-   home page maps to the slug set as the front page.
+2. Register the page: `wp instastudio pages` (or `instawp wp <site> -- instastudio
+   pages`) creates a published WP page for every source file that lacks one and sets
+   the front page. Re-run it whenever you add files.
 3. Refresh the WP page — no build.
 
 ### Page conventions (the renderer contract, non-negotiable)
