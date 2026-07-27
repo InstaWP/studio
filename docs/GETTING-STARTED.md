@@ -34,9 +34,14 @@ theme (or your own theme — the engine works with any).
   ```bash
   wp instastudio pages                       # local
   instawp wp <site> -- instastudio pages     # cloud sandbox
+  SITE=<site> bash scripts/wp.sh instastudio pages   # cloud, robust (see note)
   wp instastudio pages --dry-run             # preview first
   ```
   Re-run it any time you add source files.
+  > On some InstaWP nodes the CLI's `instawp wp` resolves an SSH path under
+  > `/home/…` while SSH lands in a `/web/…` chroot, so it 404s / hits a sudo
+  > error. `scripts/wp.sh` runs the same WP-CLI command and automatically falls
+  > back to direct SSH when that happens. Prefer it on cloud sandboxes.
 
 ## 3. Connect your agent to the site
 So Claude (or any agent) can build/edit/register pages:
@@ -44,6 +49,7 @@ So Claude (or any agent) can build/edit/register pages:
   `plugin/theme_files`, …). Connect it and the agent can drive the site directly.
 - **`instawp` CLI** — `instawp wp <site> -- <wp-cli>` runs WP-CLI on a cloud site;
   `instawp sync` / `instawp db` move files + data. Great for scripted steps.
+  (`scripts/wp.sh` wraps this with the chroot fallback; `scripts/publish.sh` wraps the file push.)
 - **Plain `wp`** — on local/SSH boxes.
 
 Point the agent at `CLAUDE.md` (this repo's root) so it knows the rules and conventions.
@@ -61,8 +67,10 @@ Ask your agent: *"add a pricing page"*. It uses the **build-page** skill: writes
   hand it to your agent with the **resolve-feedback** skill, re-import to close the loop.
 
 ## 6. Ship
-`SITE=<your-sandbox> bash scripts/publish.sh` pushes `site/` + theme + plugin. When the
-sandbox is ready, promote it to production from the InstaWP dashboard.
+`SITE=<your-sandbox> bash scripts/publish.sh` pushes `site/` + theme + plugin
+(add `DRY_RUN=1` to preview). It uses `instawp sync push` and auto-falls back to
+direct rsync on nodes with the `/home`-vs-`/web` chroot quirk, so it just works.
+When the sandbox is ready, promote it to production from the InstaWP dashboard.
 
 ## Notes
 - The engine is the `iwp-studio` **plugin** (works with any theme). It's the clean,
