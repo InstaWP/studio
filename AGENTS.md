@@ -1,8 +1,8 @@
 # AGENTS.md
 
 This is an **HTML-first WordPress site** built with InstaStudio: the pages are plain
-HTML files in `site/`, rendered live by a lightweight theme (no page builder, no block
-editor, no build step).
+HTML files in `site/`, rendered live by the `iwp-studio` plugin (no page builder, no
+block editor, no build step).
 
 **Full instructions:** see [`CLAUDE.md`](CLAUDE.md).
 **Design system:** [`site/DESIGN.md`](site/DESIGN.md). **Setup:** [`docs/GETTING-STARTED.md`](docs/GETTING-STARTED.md).

@@ -11,7 +11,7 @@ description: >-
 # Build a page
 
 The **Build** leg of Build → Edit → Review → Resolve → Ship. A page is one HTML file
-in the site source dir (`site/` by default); the theme renders it live, no build step.
+in the site source dir (`site/` by default); the `iwp-studio` plugin renders it live, no build step.
 
 ## Before you write
 - Read the project's `CLAUDE.md` (rules) and `site/DESIGN.md` (tokens + classes).

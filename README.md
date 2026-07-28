@@ -97,8 +97,8 @@ Clone to an AI-built page in ~10 minutes, full walk-through in
 
 | Path | What |
 |---|---|
-| `docs/` | `GETTING-STARTED.md` (setup + workflow) · `BLUEPRINT.md` (packaging later). |
-| `scripts/` | `bootstrap.sh` (assemble into a WP install) · `publish.sh` (ship to an InstaWP sandbox). |
+| `docs/` | `GETTING-STARTED.md` (setup + workflow) · `BLUEPRINT.md` (packaging later) · `instawp-cli-chroot-bug.md` (a known `instawp` CLI issue on some nodes + the workaround these scripts use). |
+| `scripts/` | `bootstrap.sh` (assemble into a local WP install) · `publish.sh` (ship `site/` + theme + plugins to an InstaWP sandbox) · `wp.sh` (run WP-CLI on a cloud site). `publish.sh` + `wp.sh` wrap the `instawp` CLI and auto-fall-back around a docroot bug on some sandbox nodes. |
 
 ### iwp-feedback CLI
 

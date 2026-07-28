@@ -92,8 +92,8 @@ typically include:
 
 - **No fabricated proof** — never invent logos, testimonials, customers, numbers, or
   quotes; flag unverified ones with an inline `VERIFY` comment.
-- **Edit the source of truth**, not a build artifact — the theme renders the `.html`
-  directly, no build step.
+- **Edit the source of truth**, not a build artifact — the `iwp-studio` plugin renders
+  the `.html` directly, no build step.
 - **Stay lightweight / in the design system** — plain CSS, vanilla JS, reuse existing
   classes; read the project's `DESIGN.md`.
 - **Never publish to production.** Publish only to the project's opt-in staging target,
