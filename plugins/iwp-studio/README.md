@@ -29,5 +29,8 @@ This is the clean, theme-agnostic engine. The following were specific to the sit
 extracted from and were left out — add your own via the filters/hooks if you need them:
 - **SEO** beyond a basic `<title>` + meta-description + canonical (no Rank Math/Yoast coupling).
 - **og:image** generation. **Brand fonts** (bring your own in the source CSS). **UTM link
-  decoration.** A **server-side blog** (this engine renders static pages; use normal WP
-  templates/theme for a blog).
+  decoration.**
+
+The engine renders static pages; the **structured blog** (real WP posts, categories,
+authors, search) ships in the **`iwp-studio` companion theme**, not this plugin — so it
+stays theme-level. Use your own theme's blog templates if you bring your own theme.

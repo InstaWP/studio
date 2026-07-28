@@ -90,7 +90,7 @@ Then point your AI agent at [`CLAUDE.md`](CLAUDE.md) and ask it to "add a page."
 | Path | What |
 |---|---|
 | `plugins/iwp-studio/` | **The source-rendered engine (a plugin).** Renders source HTML live as pages, includes **Edit in Place** (click text/images to edit → writes back to the source) and `wp instastudio pages`. Works with any theme (takes over only mapped pages via `template_include`). Clean/generic, see its [README](plugins/iwp-studio/README.md) for what's intentionally left out. |
-| `themes/iwp-studio/` | **Minimal companion theme.** Satisfies WordPress + renders any non-source request. Bring your own theme instead if you like. |
+| `themes/iwp-studio/` | **Companion theme.** Satisfies WordPress, renders any non-source request, and ships a **structured blog** (real WP posts, categories, authors, search) styled to match your pages. Pages stay HTML files; the blog stays structured content. Bring your own theme instead if you like. |
 
 **Your site**
 

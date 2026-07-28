@@ -1,0 +1,15 @@
+<!-- InstaWP blog post card — SINGLE SOURCE.
+     Rendered by feed.js (static preview) AND by the WP theme (single.php/home/archive/search).
+     Tokens: {{href}} {{thumbClass}} {{icon}} {{thumbImg}} {{pillClass}} {{catLabel}}
+             {{title}} {{excerpt}} {{avClass}} {{avInitials}} {{author}} {{date}} {{read}}
+     {{thumbImg}} is an optional <img> (real featured/first-content image); when empty the
+     category gradient + icon block shows as the fallback. Edit once; static + WP both update. -->
+<a class="pcard" href="{{href}}">
+  <div class="thumb {{thumbClass}}"><span class="mk"></span><span class="gl"></span><span class="ico">{{icon}}</span>{{thumbImg}}</div>
+  <div class="pc-bd">
+    <div class="pc-tags"><span class="{{pillClass}}">{{catLabel}}</span></div>
+    <h3>{{title}}</h3>
+    <p>{{excerpt}}</p>
+    <div class="pc-foot"><div class="pmeta"><span class="av {{avClass}}">{{avInitials}}</span> {{author}} <span class="sep">·</span> {{date}} <span class="sep">·</span> {{read}}</div></div>
+  </div>
+</a>

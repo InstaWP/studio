@@ -86,9 +86,24 @@ Ask your agent: *"add a pricing page"*. It uses the **build-page** skill: writes
 direct rsync on nodes with the `/home`-vs-`/web` chroot quirk, so it just works.
 When the sandbox is ready, promote it to production from the InstaWP dashboard.
 
+## Blog (structured content)
+Pages are HTML files; the **blog is real WordPress posts**. The `iwp-studio` companion
+theme ships a structured blog — post index, single post (auto TOC + related), category /
+tag / author archives, and search — styled to match your pages (it reuses `chrome.js` for
+nav/footer, and category theming is automatic).
+
+1. Create a page named **Blog** and set it as your Posts page: **Settings → Reading →
+   "Posts page"**. (Or `wp option update page_for_posts <id>`.)
+2. Write posts — an agent can create them via InstaMCP `create_content`; humans manage
+   them in **wp-admin** only. That's the split: chat to build pages, log into WP just for
+   blog content.
+
+Override copy per-site with the `iwps_blog_title` / `iwps_blog_tagline` / `iwps_blog_rail_cta`
+filters. Using your own theme instead of the companion? Bring your own blog templates.
+
 ## Notes
 - The engine is the `iwp-studio` **plugin** (works with any theme). It's the clean,
   generic core; see `plugins/iwp-studio/README.md` for what's intentionally left out
-  (SEO plugin coupling, og-images, brand fonts, a server-side blog).
+  (SEO plugin coupling, og-images, brand fonts).
 - Hard rules live in `CLAUDE.md`; keep the agent honest (no fabricated proof; edit `site/`;
   never publish to prod unasked).

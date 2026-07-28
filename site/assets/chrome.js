@@ -9,6 +9,7 @@
       '<nav class="links">' +
         '<a href="index.html">Home</a>' +
         '<a href="about.html">About</a>' +
+        '<a href="/blog/">Blog</a>' +
         '<a class="btn" href="#">Get started</a>' +
       '</nav>' +
     '</div></header>';
