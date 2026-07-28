@@ -2,6 +2,20 @@
 
 Go from clone to an AI-built, HTML-first WordPress page. ~10 minutes.
 
+## Fast path (cloud, one command)
+If you have the `instawp` CLI (`npm i -g @instawp/cli && instawp login`), this creates a
+sandbox and does steps 1–2 for you (deploy + activate + register pages):
+
+```bash
+git clone https://github.com/InstaWP/studio.git && cd studio
+bash scripts/quickstart.sh mystudio        # -> https://mystudio.instawp.site
+# PERSIST=1 bash scripts/quickstart.sh mystudio   # a permanent site instead of a sandbox
+# SITE=<existing-slug> bash scripts/quickstart.sh # set up an existing site
+```
+
+Then jump to step 3 (connect your agent). The manual steps below are for local WP or if
+you want to do it by hand.
+
 ## What you need
 - A WordPress site to render into. Easiest: an **InstaWP** sandbox
   (<https://instawp.com>, disposable, promotable to production later). Local WP also works.

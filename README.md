@@ -54,13 +54,25 @@ so it works with **any** theme.
 
 ## Quick start
 
-Clone to an AI-built page in ~10 minutes, full walk-through in
-[`docs/GETTING-STARTED.md`](docs/GETTING-STARTED.md):
+**One command (cloud, easiest)** — creates a sandbox and sets up everything
+(deploy + activate + register pages):
+
+```bash
+npm i -g @instawp/cli && instawp login    # once
+git clone https://github.com/InstaWP/studio.git && cd studio
+bash scripts/quickstart.sh mystudio       # -> https://mystudio.instawp.site is live
+```
+
+Then point your AI agent at [`CLAUDE.md`](CLAUDE.md) and ask it to "add a page."
+
+<details>
+<summary>Manual / local, or step-by-step (full walk-through in <a href="docs/GETTING-STARTED.md"><code>docs/GETTING-STARTED.md</code></a>)</summary>
 
 1. **Assemble** into a WordPress install: `bash scripts/bootstrap.sh /path/to/wordpress`
    (or copy `plugins/iwp-studio` + `plugins/iwp-feedback` into `wp-content/plugins/`,
    `themes/iwp-studio` into `wp-content/themes/`, and `site/` to the webroot). Activate
-   the two plugins + the companion theme.
+   the two plugins + the companion theme. On a cloud site, `bash scripts/publish.sh`
+   pushes the files.
 2. **Create the pages** — `wp instastudio pages` publishes a WordPress page for every
    `.html` in `site/` (slug = filename) and sets the front page.
 3. **Connect** your agent via InstaMCP or the `instawp` CLI and point it at
@@ -68,6 +80,8 @@ Clone to an AI-built page in ~10 minutes, full walk-through in
 4. **Build → Review → Resolve → Ship** — ask it to "add a page" (the `build-page` skill),
    collect feedback with the widget, resolve with the `resolve-feedback` skill, and
    ship with `scripts/publish.sh`.
+
+</details>
 
 ## What's here
 
@@ -98,7 +112,7 @@ Clone to an AI-built page in ~10 minutes, full walk-through in
 | Path | What |
 |---|---|
 | `docs/` | `GETTING-STARTED.md` (setup + workflow) · `BLUEPRINT.md` (packaging later) · `instawp-cli-chroot-bug.md` (a known `instawp` CLI issue on some nodes + the workaround these scripts use). |
-| `scripts/` | `bootstrap.sh` (assemble into a local WP install) · `publish.sh` (ship `site/` + theme + plugins to an InstaWP sandbox) · `wp.sh` (run WP-CLI on a cloud site). `publish.sh` + `wp.sh` wrap the `instawp` CLI and auto-fall-back around a docroot bug on some sandbox nodes. |
+| `scripts/` | `quickstart.sh` (**one command**: create a cloud sandbox → deploy → activate → register pages) · `bootstrap.sh` (assemble into a local WP install) · `publish.sh` (ship `site/` + theme + plugins to a cloud site) · `wp.sh` (run WP-CLI on a cloud site). `publish.sh` + `wp.sh` wrap the `instawp` CLI and auto-fall-back around a docroot quirk on some nodes. |
 
 ### iwp-feedback CLI
 
