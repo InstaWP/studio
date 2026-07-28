@@ -1,11 +1,23 @@
 # Bug report — `instawp` CLI resolves the wrong docroot on chroot sandbox nodes
 
+> ✅ **RESOLVED (mostly) — verified 2026-07-28.** The CLI now resolves the correct
+> `/web/<site>/public_html` chroot path. On a fresh sandbox: **`instawp sync push` works**
+> (targets `/web/…`, no more `/home/<user>/…`) and **`instawp wp` (default SSH transport)
+> works** (`core version` → `7.0.2`). InstaStudio's `publish.sh` + `wp.sh` now succeed via
+> the plain CLI; their direct-SSH fallbacks are retained as a harmless safety net and no
+> longer trigger.
+> **One remaining case:** `instawp wp --api …` still uses the old `/home/<user>/tmp/…`
+> path and fails with `sudo: unable to execute /home/<user>/tmp/command_temp_<n>:
+> Permission denied`. Prefer the default (non-`--api`) transport, which is fixed. The
+> original report is kept below for reference.
+
+---
+
 **To:** InstaWP CLI team
 **From:** InstaStudio (dogfooding on fresh `--temporary` sandboxes)
 **Date:** 2026-07-28
 **CLI:** `@instawp/cli` (via nvm node v22)
-**Severity:** High — breaks `sync push` (file deploy) **and** `wp` (WP-CLI) for **all**
-CLI users whose site is provisioned on an affected node, not just InstaStudio.
+**Severity:** ~~High~~ → **Mostly fixed** (see resolution banner). `--api` transport still affected.
 
 ## Summary
 

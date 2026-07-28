@@ -38,10 +38,10 @@ theme (or your own theme — the engine works with any).
   wp instastudio pages --dry-run             # preview first
   ```
   Re-run it any time you add source files.
-  > On some InstaWP nodes the CLI's `instawp wp` resolves an SSH path under
-  > `/home/…` while SSH lands in a `/web/…` chroot, so it 404s / hits a sudo
-  > error. `scripts/wp.sh` runs the same WP-CLI command and automatically falls
-  > back to direct SSH when that happens. Prefer it on cloud sandboxes.
+  > `instawp wp` (default transport) works directly. `scripts/wp.sh` runs the same
+  > command with a direct-SSH fallback kept as a safety net (harmless if unused).
+  > Avoid `instawp wp --api` — it still hits an old docroot bug on some nodes; see
+  > `docs/instawp-cli-chroot-bug.md`.
 
 ## 3. Connect your agent to the site
 So Claude (or any agent) can build/edit/register pages:
