@@ -54,8 +54,9 @@ push() {
 }
 
 echo "Publishing to $SITE …"
-# source HTML -> webroot (theme reads it from there; adjust --remote-path to your INSTAWP_HB_DIR)
-push "$ROOT/site/"    site                  --webroot
+# source HTML -> wp-content/site (the default INSTAWP_HB_DIR; lives under wp-content so
+# it migrates with the site). If you override INSTAWP_HB_DIR, adjust this remote-path.
+push "$ROOT/site/"    wp-content/site
 # theme + plugin -> wp-content
 push "$ROOT/themes/"  wp-content/themes
 push "$ROOT/plugins/" wp-content/plugins

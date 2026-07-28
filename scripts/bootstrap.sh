@@ -9,7 +9,7 @@ WP="${1:-}"; ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 ln -sfn "$ROOT/plugins/iwp-studio"    "$WP/wp-content/plugins/iwp-studio"
 ln -sfn "$ROOT/themes/iwp-studio"     "$WP/wp-content/themes/iwp-studio"
 ln -sfn "$ROOT/plugins/iwp-feedback"  "$WP/wp-content/plugins/iwp-feedback"
-[ -d "$WP/site" ] || cp -a "$ROOT/site" "$WP/site"   # source HTML at the webroot (INSTAWP_HB_DIR default)
-echo "Linked theme + plugin; seeded $WP/site."
+[ -d "$WP/wp-content/site" ] || cp -a "$ROOT/site" "$WP/wp-content/site"   # source HTML (INSTAWP_HB_DIR default = wp-content/site)
+echo "Linked theme + plugin; seeded $WP/wp-content/site."
 echo "Next: activate the 'iwp-studio' + 'iwp-feedback' plugins and the 'iwp-studio' theme,"
 echo "then run: wp instastudio pages   (creates WP pages + front page). See docs/GETTING-STARTED.md."

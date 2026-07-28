@@ -19,10 +19,30 @@ defined( 'ABSPATH' ) || exit;
 define( 'IWPS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'IWPS_URL', plugin_dir_url( __FILE__ ) );
 
-// Source directory of your HTML pages (the source of truth). Override BOTH in
-// wp-config.php to point elsewhere. Default: <wp-root>/site/.
-defined( 'INSTAWP_HB_DIR' ) || define( 'INSTAWP_HB_DIR', ABSPATH . 'site/' );
-defined( 'INSTAWP_HB_URL' ) || define( 'INSTAWP_HB_URL', home_url( '/site/' ) );
+// Source directory of your HTML pages (the source of truth). Default lives INSIDE
+// wp-content (`wp-content/site/`) so the source MIGRATES with the site — host-to-host
+// and sandbox->production carry wp-content, but not always arbitrary webroot dirs.
+// Override BOTH in wp-config.php to point elsewhere.
+if ( ! defined( 'INSTAWP_HB_DIR' ) ) {
+	// Honor the legacy webroot location (`<wp-root>/site/`) if the source already
+	// lives there; otherwise default to the migration-safe wp-content location.
+	if ( ! is_dir( WP_CONTENT_DIR . '/site' ) && is_dir( ABSPATH . 'site' ) ) {
+		define( 'INSTAWP_HB_DIR', ABSPATH . 'site/' );
+	} else {
+		define( 'INSTAWP_HB_DIR', WP_CONTENT_DIR . '/site/' );
+	}
+}
+if ( ! defined( 'INSTAWP_HB_URL' ) ) {
+	// Derive the matching URL from the resolved dir (content_url under wp-content,
+	// else home_url under the webroot).
+	$iwps_dir = untrailingslashit( INSTAWP_HB_DIR );
+	if ( 0 === strpos( $iwps_dir, untrailingslashit( WP_CONTENT_DIR ) ) ) {
+		define( 'INSTAWP_HB_URL', content_url( substr( $iwps_dir, strlen( untrailingslashit( WP_CONTENT_DIR ) ) ) ) . '/' );
+	} else {
+		define( 'INSTAWP_HB_URL', home_url( substr( $iwps_dir, strlen( untrailingslashit( ABSPATH ) ) ) ) . '/' );
+	}
+	unset( $iwps_dir );
+}
 
 require_once IWPS_DIR . 'includes/render.php';   // the source-rendered engine
 require_once IWPS_DIR . 'includes/editor.php';   // Edit in Place

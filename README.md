@@ -70,7 +70,7 @@ Then point your AI agent at [`CLAUDE.md`](CLAUDE.md) and ask it to "add a page."
 
 1. **Assemble** into a WordPress install: `bash scripts/bootstrap.sh /path/to/wordpress`
    (or copy `plugins/iwp-studio` + `plugins/iwp-feedback` into `wp-content/plugins/`,
-   `themes/iwp-studio` into `wp-content/themes/`, and `site/` to the webroot). Activate
+   `themes/iwp-studio` into `wp-content/themes/`, and `site/` into `wp-content/site/`). Activate
    the two plugins + the companion theme. On a cloud site, `bash scripts/publish.sh`
    pushes the files.
 2. **Create the pages** — `wp instastudio pages` publishes a WordPress page for every

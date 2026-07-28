@@ -5,10 +5,11 @@ builder, no block editor, no build step, no DB-stored content. **Works with any
 theme** (it takes over rendering only for mapped pages via `template_include`).
 
 ## What it does
-- **Page map** — `INSTAWP_HB_DIR` (default `<wp-root>/site/`) is scanned: every `.html`
-  becomes a page (slug = filename; `index.html` → the front page). Or provide an explicit
-  `<source>/pages.json`. Filter: `instawp_homebuild_pages`. Override the dir with
-  `define( 'INSTAWP_HB_DIR', … )` + `INSTAWP_HB_URL` in `wp-config.php`.
+- **Page map** — `INSTAWP_HB_DIR` (default `wp-content/site/`, so the source migrates
+  with the site; a legacy `<wp-root>/site/` at the webroot is honored if present) is
+  scanned: every `.html` becomes a page (slug = filename; `index.html` → the front page).
+  Or provide an explicit `<source>/pages.json`. Filter: `instawp_homebuild_pages`. Override
+  the dir with `define( 'INSTAWP_HB_DIR', … )` + `INSTAWP_HB_URL` in `wp-config.php`.
 - **Render** — reads the file live and emits it as the page: keeps the `<head>` `<style>`,
   the body between `#site-nav` / `#site-footer`, and the page's own inline scripts;
   rewrites `assets/…` refs to the source URL and internal `.html` links to WP routes.
@@ -20,7 +21,7 @@ theme** (it takes over rendering only for mapped pages via `template_include`).
   lacks one (nested slugs get ancestor pages) and set the front page. `--dry-run` supported.
 
 ## Install
-Drop this folder in `wp-content/plugins/`, activate it, put your HTML in `<wp-root>/site/`
+Drop this folder in `wp-content/plugins/`, activate it, put your HTML in `wp-content/site/`
 (or point `INSTAWP_HB_DIR` at it), then `wp instastudio pages`. Pair with the minimal
 `iwp-studio` companion theme or your own.
 

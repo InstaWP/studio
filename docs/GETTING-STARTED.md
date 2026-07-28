@@ -29,17 +29,21 @@ The repo is a set of components (theme + plugin + starter `site/` + skills). Put
 
 **Manual / cloud:** copy `plugins/iwp-studio` + `plugins/iwp-feedback` →
 `wp-content/plugins/`, `themes/iwp-studio` → `wp-content/themes/`, and the `site/` folder
-to the webroot (or anywhere, then point the plugin at it — see step 3).
+to `wp-content/site/` (the default; anywhere works if you point the plugin at it — step 3).
+Keeping the source under `wp-content` means it **migrates with the site** (sandbox →
+production, host to host).
 
 Then: activate the **iwp-studio** + **iwp-feedback** plugins and the **iwp-studio** companion
 theme (or your own theme — the engine works with any).
 
 ## 2. Point WordPress at your pages
-- The iwp-studio plugin renders HTML from a **source directory**. Default: `<wp-root>/site/`.
+- The iwp-studio plugin renders HTML from a **source directory**. Default:
+  `wp-content/site/` (inside wp-content so it migrates with the site). A legacy
+  `<wp-root>/site/` at the webroot is still honored if that's where your source already is.
   Override in `wp-config.php` if it lives elsewhere:
   ```php
-  define('INSTAWP_HB_DIR', ABSPATH . 'site/');            // filesystem path
-  define('INSTAWP_HB_URL', home_url('/site/'));           // matching URL
+  define('INSTAWP_HB_DIR', WP_CONTENT_DIR . '/site/');    // filesystem path
+  define('INSTAWP_HB_URL', content_url('/site/'));        // matching URL
   ```
 - Every `.html` in `site/` becomes a page; the slug is the filename
   (`about.html` → `about`, `index.html` → the front page).
